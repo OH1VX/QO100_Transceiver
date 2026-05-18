@@ -6,7 +6,7 @@ Intention of the fork is to explore the codebase and bring up following changes:
   * Original doesn't actually shift the received spectrum according to the frequency drift
   * [] Automatic re-calibration when frequency drift happens
 * Add support for minimal set of hamlib compatible commands
-  * [] Set frequency: F <frequency>
+  * [] Set frequency: F \<frequency\>
   * [] Set transmit on and off: T 1, T 0
 * [] Add new resolution
 * [] Compile GUI by default
