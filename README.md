@@ -1,3 +1,20 @@
+# Note: This is a fork of dj0abr's repository
+
+Intention of the fork is to explore the codebase and bring up following changes:
+* [x] Update README.md to reflect current and upcoming changes
+* [] Change the operation of QO-100 Low beacon tracker
+  * Original doesn't actually shift the received spectrum according to the frequency drift
+  * [] Automatic re-calibration when frequency drift happens
+* Add support for minimal set of hamlib compatible commands
+  * [] Set frequency: F <frequency>
+  * [] Set transmit on and off: T 1, T 0
+* [] Add new resolution
+* [] Compile GUI by default
+* [] Remove generated files from
+
+Bring the changes with separate commits so that it's easier to review and perhaps cherry-pick changes to other repositories.
+
+
 # QO100_Transceiver
 QO-100 Software Transceiver using an Adalm-Pluto and an SBC (Raspberry, Odroid ...), also works on Linux-Desktop PCs 
 
@@ -26,7 +43,7 @@ V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it e
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
 
 
-![alt text](https://github.com/dj0abr/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
+![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
 
 ## Hardware requirements
 
@@ -43,14 +60,14 @@ http://wiki.amsat-dl.org/doku.php?id=en:plutotrx:overview
 ## Installation
 
 The complete installation (and upgrading) is done by one single install file:
-https://raw.githubusercontent.com/dj0abr/QO100_Transceiver/main/install
+https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
 
 (no need to clone this github project, all is done automatically by this install file)
 
 open a terminal and run these commands:
 
 ```
-wget https://raw.githubusercontent.com/dj0abr/QO100_Transceiver/main/install
+wget https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
 chmod 755 install
 ./install
 ```
