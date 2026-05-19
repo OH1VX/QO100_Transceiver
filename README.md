@@ -2,17 +2,18 @@
 
 Intention of the fork is to explore the codebase and bring up following changes:
 * [x] Update README.md to reflect current and upcoming changes
-* [] Change the operation of QO-100 Low beacon tracker
+* [ ] Change the operation of QO-100 Low beacon tracker
   * Original doesn't actually shift the received spectrum according to the frequency drift
-  * [] Automatic re-calibration when frequency drift happens
+  * [ ] Automatic re-calibration when frequency drift happens
 * Add support for minimal set of hamlib compatible commands
-  * [] Set frequency: F \<frequency\>
-  * [] Set transmit on and off: T 1, T 0
-* [] Add new resolution
-* [] Compile GUI by default
-* [] Remove generated files from
+  * [ ] Set frequency: F \<frequency\>
+  * [ ] Set transmit on and off: T 1, T 0
+* [ ] Compile GUI by default
+  * [ ] Remove generated files from git
+  * [ ] Add new resolution
+* [x] Make install script's URLs to point to this fork
 
-Bring the changes with separate commits so that it's easier to review and perhaps cherry-pick changes to other repositories.
+Bring the changes with separate commits so that it's easier to review and perhaps cherry-pick changes to other repositories. The mentioned changes have proof-of-concept implementation to be brought here.
 
 
 # QO100_Transceiver

@@ -8,11 +8,11 @@ sudo apt-get update
 echo "install git"
 sudo apt-get install git -y
 if [ ! -d "QO100_Transceiver" ] ; then
-        git clone https://github.com/dj0abr/QO100_Transceiver
+        git clone https://github.com/OH1VX/QO100_Transceiver
         cd QO100_Transceiver
     else
         cd QO100_Transceiver
-        git pull https://github.com/dj0abr/QO100_Transceiver
+        git pull https://github.com/OH1VX/QO100_Transceiver
     fi
 cd ~/QO100_Transceiver/scripts
 ./prepare_ubuntu_pluto
