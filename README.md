@@ -3,7 +3,7 @@
 # Notes from OH1VX
 This is proof-of-concept to improve RX frequency stability and enable this software to be used with VarAC. 
 
-There are still room for improvement in many things, so changes are likely. Bug reports and CR's are welcome!
+There are still room for improvement in many things, so changes are likely. Bug reports and pull requests are welcome!
 
 I think at RX the frequency drift compensation should have been made in different manner, but hey, this quick and dirty way works too. The inaccuracy is rarely over 6Hz with my setup.
 
