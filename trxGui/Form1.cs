@@ -102,6 +102,16 @@ namespace trxGui
 
             if (statics.windowsize == wsize++)
             {
+                // sizes for screens 1800x400 pixel
+                window_width = 1880;
+                window_height = 400;
+                button_size = 32;
+                bigfnt = new Font("Verdana", 24.0f);
+            }
+
+
+            if (statics.windowsize == wsize++)
+            {
                 // sizes for screens 1600x1050 pixel
                 window_width = 1600;
                 window_height = 1050;
@@ -333,6 +343,27 @@ namespace trxGui
             {
                 panel_smallwf.Invalidate();
             }
+            
+            if (statics.hamlib_ptt_received == true)
+            {
+				statics.hamlib_ptt_received = false;
+				Console.WriteLine("rigctl ptt received to Form1: "+statics.hamlib_ptt_value);
+				statics.pttmode = 0; //need to change the mode to keep ptt on until disabled
+				if (statics.hamlib_ptt_value > 0) statics.ptt = true;
+				else statics.ptt = false;
+				panel1.Invalidate();
+                setPTT(statics.ptt);
+                pttstat = statics.ptt;
+			}
+
+            if(statics.hamlib_freq_received == true)
+            {
+                statics.hamlib_freq_received = false;
+                Console.WriteLine("rigctl freq received to Form1: "+statics.hamlib_freq_value);
+                statics.TXoffset = (int)(statics.hamlib_freq_value-2399970000);
+                statics.RXoffset = (int)(statics.hamlib_freq_value-2399970000);
+                statics.sendRXTXoffset();
+            }
 
             if (statics.pttmode == 0)
             {
@@ -469,6 +500,13 @@ namespace trxGui
             if(statics.beaconoffset != oldbcnoffset)
             {
                 oldbcnoffset = statics.beaconoffset;
+                if(statics.beaconoffset!=0) {
+                    if(Math.Abs(statics.beaconoffset)>4) statics.lnboffset += statics.beaconoffset/2;
+                    else {
+                        statics.lnboffset += (statics.beaconoffset<0)?-1:1; //Miika modified
+                    }
+                }
+                statics.sendBaseQRG();
                 panel_qrg.Invalidate();
             }
 

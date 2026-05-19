@@ -1,7 +1,7 @@
 VERSION := 173
 CXXFLAGS = -Wall -O3 -std=c++0x -Wno-write-strings -Wno-narrowing -DDRIVER_SERIAL=$(VERSION) $(RASPI)
 LDFLAGS = -lpthread -lrt -lm -liio -lliquid -lad9361 -lfftw3 -lfftw3_threads -lsndfile -lasound -lsoundio -lgpiod
-OBJ = qo100trx.o rx.o tx.o fft.o\
+OBJ = trxdriver/rigctld_server.o trxdriver/rigctl_commands.o qo100trx.o rx.o tx.o fft.o\
 kmlib/kmtimer.o kmlib/km_helper.o kmlib/kmfifo.o kmlib/rotary.o\
 udp/udp.o\
 liquid/liquiddrv.o liquid/liquiddrv_modulator.o\
@@ -12,6 +12,7 @@ libkmaudio/libkmaudio_playback_linux.o libkmaudio/libkmaudio_resampler.o
 
 default: $(OBJ)
 	g++ $(CXXFLAGS) -o Release/trxdriver $(OBJ) $(LDFLAGS)
+	cd trxGui;xbuild /p:Configuration=Release trxGui.csproj
 	echo $(VERSION) > version.txt
 	rm -rf  Release/*.config Release/*.pdb
 	chmod 755 Release/startQO100trx
@@ -24,4 +25,6 @@ clean:
 	rm -rf liquid/*.o 
 	rm -rf libkmaudio/*.o 
 	rm -rf Release/trxdriver
-	
+	rm -rf trxGui/obj/
+	rm -rf Release/qo100trx.exe Release/version.txt Release/qo100trx.exe.mdb Release/wget-log
+	rm -rf trxdriver/*.o

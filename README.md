@@ -1,3 +1,28 @@
+# Note: This is a fork of dj0abr's repository
+
+Intention of the fork is to explore the codebase and bring up following changes to version V1.73a+OH1VX-r1:
+* [x] Update README.md to reflect current and upcoming changes
+* [x] Change the operation of QO-100 Low beacon tracker
+  * Original doesn't actually shift the received spectrum according to the frequency drift
+  * [x] Automatic re-calibration when frequency drift happens
+  * [ ] Implement recovery from drift caused by spurious TX near low beacon. Or switch using upper beacon when low has 
+* [x] Add support for minimal set of hamlib compatible commands (default port 10010)
+  * [x] Set frequency: F \<frequency\>
+  * [x] Set transmit on and off: T 1, T 0
+  * [x] Works with VarAC
+* [x] Allow monitoring devices to be used as audio inputs on Linux
+* [x] Compile GUI by default
+  * [x] Remove generated files from git
+  * [x] Add new resolution
+  * [x] Increase size of setup window
+     * perhaps will be too high for small displays, but now hidden items are exposed
+* [x] Make URLs to point to this fork
+  * [x] install script
+  * [x] version checking
+
+Bring the changes with separate commits so that it's easier to review and perhaps cherry-pick changes to other repositories. The mentioned changes have proof-of-concept implementation to be brought here.
+
+
 # QO100_Transceiver
 QO-100 Software Transceiver using an Adalm-Pluto and an SBC (Raspberry, Odroid ...), also works on Linux-Desktop PCs 
 
@@ -24,9 +49,10 @@ V1.72 ...September, 18 2021 ... new AUDIO menu, new AGC, allows full output even
          January 13, 2022 ... modified installation procedure to get it running on raspberry OS "bullseye"\
 V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it easier to continue a QSO if the software was stopped or crashed.\
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
+V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010).
 
 
-![alt text](https://github.com/dj0abr/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
+![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
 
 ## Hardware requirements
 
@@ -43,14 +69,14 @@ http://wiki.amsat-dl.org/doku.php?id=en:plutotrx:overview
 ## Installation
 
 The complete installation (and upgrading) is done by one single install file:
-https://raw.githubusercontent.com/dj0abr/QO100_Transceiver/main/install
+https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
 
 (no need to clone this github project, all is done automatically by this install file)
 
 open a terminal and run these commands:
 
 ```
-wget https://raw.githubusercontent.com/dj0abr/QO100_Transceiver/main/install
+wget https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
 chmod 755 install
 ./install
 ```
