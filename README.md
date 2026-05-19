@@ -8,8 +8,8 @@ Intention of the fork is to explore the codebase and bring up following changes:
 * Add support for minimal set of hamlib compatible commands
   * [ ] Set frequency: F \<frequency\>
   * [ ] Set transmit on and off: T 1, T 0
-* [ ] Compile GUI by default
-  * [ ] Remove generated files from git
+* [x] Compile GUI by default
+  * [x] Remove generated files from git
   * [ ] Add new resolution
 * [x] Make install script's URLs to point to this fork
 

@@ -12,6 +12,7 @@ libkmaudio/libkmaudio_playback_linux.o libkmaudio/libkmaudio_resampler.o
 
 default: $(OBJ)
 	g++ $(CXXFLAGS) -o Release/trxdriver $(OBJ) $(LDFLAGS)
+	cd trxGui;xbuild /p:Configuration=Release trxGui.csproj
 	echo $(VERSION) > version.txt
 	rm -rf  Release/*.config Release/*.pdb
 	chmod 755 Release/startQO100trx
@@ -24,4 +25,5 @@ clean:
 	rm -rf liquid/*.o 
 	rm -rf libkmaudio/*.o 
 	rm -rf Release/trxdriver
-	
+	rm -rf trxGui/obj/
+	rm -rf Release/qo100trx.exe Release/version.txt Release/qo100trx.exe.mdb Release/wget-log
