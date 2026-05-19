@@ -106,8 +106,8 @@ static int lastoffset = -1;
     if(lastoffset != newoffset)
     {
         lastoffset = newoffset;
-        printf("tune RX to %f\n",BASEQRG*1e3 + lastoffset);
         float RADIANS_PER_SAMPLE   = ((2.0f * (float)M_PI * (lastoffset-280000))/(float)SAMPRATE);
+        printf("tune RX to %f, radianspersample %f\n",BASEQRG*1e3 + lastoffset,RADIANS_PER_SAMPLE);
         nco_crcf_set_phase(dnnco, 0.0f);
         nco_crcf_set_frequency(dnnco, RADIANS_PER_SAMPLE);
     }
@@ -251,6 +251,11 @@ const int bcnInterpolfactor = SAMPRATE / bcn_FFTsamprate;
 firdecim_crcf bcn_decim = NULL;
 
 int bcnoffset = -1;
+int bcnoffset_new = -1;
+
+int bcn_spurious_count = 0;
+int bcn_spurious_max = 5;
+bool bcn_spurious_recovery = false;
 
 void init_beaconlock()
 {
@@ -260,6 +265,7 @@ void init_beaconlock()
     float RADIANS_PER_SAMPLE   = ((2.0f * (float)M_PI * (offset-280000))/(float)SAMPRATE);
     nco_crcf_set_phase(bcn_dnnco, 0.0f);
     nco_crcf_set_frequency(bcn_dnnco, RADIANS_PER_SAMPLE);
+    printf("radianspersample %f\n",RADIANS_PER_SAMPLE);
 
     // Low pass filter
     bcn_lp_q = iirfilt_crcf_create_prototype(LIQUID_IIRDES_ELLIP, LIQUID_IIRDES_LOWPASS, LIQUID_IIRDES_SOS,
@@ -367,42 +373,83 @@ static int bcn_din_idx = 0;
     //printf("%d  %d  %d\n",minqrg,maxqrg,diff);
 
     int newoffset = 0;
-    if(diff > 380) 
+    if(diff > 380 && diff < 420) 
     {
+        //printf("%d  %d  %d\n",minqrg,maxqrg,diff);
         // we have both frequencies, then measure the beacon mir frequency
         int bcnqrg = minqrg + diff/2;
         int bcnqrgsoll = 500200;    // expected frequency
-        bcnoffset = (bcnqrg - bcnqrgsoll);
-        //printf("lower beacon %d .. %d: mid QRG: %d kHz. Offset: %d Hz\n",minqrg,maxqrg,bcnqrg,bcnoffset);
+        bcnoffset_new = (bcnqrg - bcnqrgsoll);
+        printf("lower beacon %d .. %d: mid QRG: %d kHz. Offset: %d Hz\n",minqrg,maxqrg,bcnqrg,bcnoffset);
         newoffset = 1;
+        bcn_spurious_count=0;
+    }
+    else if ( diff > 420-1) 
+    {
+        // spurious detection of two peaks during one frequency
+        printf("%d  %d  %d SPURIOUS\n",minqrg,maxqrg,diff);
+        bcn_spurious_count++;
+        //try to recover after many spurious
+        if(bcn_spurious_count>bcn_spurious_max){
+            printf(" SPURIOUS Recover\n");
+            newoffset = 1;
+            bcnoffset_new = bcnoffset_new + diff;
+            bcn_spurious_recovery = true;
+        }
+        else return;
     }
     else
     {
         // we have only one frequency
+        //printf("%d  %d  %d ONE FREQ\n",minqrg,maxqrg,diff);
+        //return;
 
-        return;
 
-
+        bcn_spurious_count=0;
         int difflow = minqrg - 500000;
         int diffhigh = maxqrg - 500400;
         if(abs(difflow) < abs(diffhigh))
         {
             //printf("lower beacon low QRG: %d kHz. Offset: %d Hz\n",minqrg,difflow);
-            bcnoffset = difflow;
-            newoffset = 1;
+            bcnoffset_new = difflow;
+            newoffset = -2;
         }
         else
         {
             //printf("lower beacon hi  QRG: %d kHz. Offset: %d Hz\n",maxqrg,diffhigh);
-            bcnoffset = diffhigh;
-            newoffset = 1;
+            bcnoffset_new = diffhigh;
+            newoffset = 2;
         }
+        
     }
 
     // send offset to GUI
-    if(newoffset)
+    //if(newoffset)
+    if((abs(bcnoffset_new)>100 && !bcn_spurious_recovery)/* || abs(bcnoffset_new)>2000*/){
+     //if(abs(bcnoffset_new)>1500 && !bcn_spurious_recovery){
+            printf("OMITTING HUGE OFFSET. Offset_new: %d Hz\n",bcnoffset_new);
+        }
+    else
     {
         uint8_t drift[5];
+        int a_iir = 1;
+        int b_iir = 0; //with 3 taps frequency offset stays too long
+        if(bcn_spurious_recovery) {
+            printf(" SPURIOUS Recovery in action\n");
+            bcnoffset=bcnoffset_new;
+            bcn_spurious_recovery = false;printf(" SPURIOUS Recover\n");
+        }
+        bcn_spurious_recovery = false;
+        if(bcnoffset_new==0)
+            bcnoffset=bcnoffset_new;
+        else
+            bcnoffset=2*(((a_iir)*bcnoffset_new/2+(b_iir)*bcnoffset/2)/(a_iir+b_iir)); //IIR filtering the offset to requce changes
+        //bcnoffset=bcnoffset_new;
+        if(abs(bcnoffset) > 200) {
+            bcnoffset=0;
+            bcnoffset_new=0;
+        }
+        printf("Offset: %d Hz. Offset_new: %d Hz\n",bcnoffset,bcnoffset_new);
         drift[0] = 6;
         drift[1] = bcnoffset >> 24;
         drift[2] = bcnoffset >> 16;

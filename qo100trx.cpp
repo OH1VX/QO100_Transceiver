@@ -136,6 +136,8 @@ void udprxfunc(uint8_t *pdata, int len, struct sockaddr_in* sender)
 		}
 	}
 
+	// 6 is for beaconoffset
+
 	if(pdata[0] == 7)
 	{
 		memcpy(pbdevname,pdata+1,100);

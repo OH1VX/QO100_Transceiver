@@ -2,9 +2,9 @@
 
 Intention of the fork is to explore the codebase and bring up following changes to version V1.73a+OH1VX-r1:
 * [x] Update README.md to reflect current and upcoming changes
-* [ ] Change the operation of QO-100 Low beacon tracker
+* [x] Change the operation of QO-100 Low beacon tracker
   * Original doesn't actually shift the received spectrum according to the frequency drift
-  * [ ] Automatic re-calibration when frequency drift happens
+  * [x] Automatic re-calibration when frequency drift happens
 * [ ] Add support for minimal set of hamlib compatible commands
   * [ ] Set frequency: F \<frequency\>
   * [ ] Set transmit on and off: T 1, T 0
@@ -47,7 +47,7 @@ V1.72 ...September, 18 2021 ... new AUDIO menu, new AGC, allows full output even
          January 13, 2022 ... modified installation procedure to get it running on raspberry OS "bullseye"\
 V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it easier to continue a QSO if the software was stopped or crashed.\
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
-V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux.\
+V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens.
 
 
 ![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)

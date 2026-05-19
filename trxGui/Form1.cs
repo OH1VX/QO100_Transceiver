@@ -479,6 +479,13 @@ namespace trxGui
             if(statics.beaconoffset != oldbcnoffset)
             {
                 oldbcnoffset = statics.beaconoffset;
+                if(statics.beaconoffset!=0) {
+                    if(Math.Abs(statics.beaconoffset)>4) statics.lnboffset += statics.beaconoffset/2;
+                    else {
+                        statics.lnboffset += (statics.beaconoffset<0)?-1:1; //Miika modified
+                    }
+                }
+                statics.sendBaseQRG();
                 panel_qrg.Invalidate();
             }
 
