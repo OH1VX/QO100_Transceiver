@@ -59,6 +59,12 @@ namespace trxGui
                         panel_smallspec_Width, panel_smallspec_Height, panel_smallwf_Width, panel_smallwf_Height;
         public static int sendtone = 0;
         public static int pttmode = 0;
+        
+        //Hamlib rigctl command received
+        public static bool hamlib_ptt_received = false;
+        public static int hamlib_ptt_value = 0;
+        public static bool hamlib_freq_received = false;
+        public static UInt32 hamlib_freq_value = 0;
 
         // Pluto frequency settings
         public static UInt32 rxqrg = 739750000; // baseband QRG of lower beacon, RX tuner = this value - 30kHz (default for 25MHz LNB)

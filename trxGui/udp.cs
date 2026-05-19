@@ -258,6 +258,24 @@ namespace trxGui
                         {
                             statics.sendtone = b[0];
                         }
+                        
+                        if (rxtype == 11) //PTT
+                        {
+                            statics.hamlib_ptt_value    = b[0];
+                            statics.hamlib_ptt_received = true;
+                        }
+                        if (rxtype == 12) //FREQ
+                        {
+                            UInt32 v = b[0];
+                            v <<= 8;
+                            v |= b[1];
+                            v <<= 8;
+                            v |= b[2];
+                            v <<= 8;
+                            v |= b[3];
+                            statics.hamlib_freq_value    = v;
+                            statics.hamlib_freq_received = true;
+                        }
                     }
                 }
                 catch { }

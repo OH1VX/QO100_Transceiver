@@ -343,6 +343,27 @@ namespace trxGui
             {
                 panel_smallwf.Invalidate();
             }
+            
+            if (statics.hamlib_ptt_received == true)
+            {
+				statics.hamlib_ptt_received = false;
+				Console.WriteLine("rigctl ptt received to Form1: "+statics.hamlib_ptt_value);
+				statics.pttmode = 0; //need to change the mode to keep ptt on until disabled
+				if (statics.hamlib_ptt_value > 0) statics.ptt = true;
+				else statics.ptt = false;
+				panel1.Invalidate();
+                setPTT(statics.ptt);
+                pttstat = statics.ptt;
+			}
+
+            if(statics.hamlib_freq_received == true)
+            {
+                statics.hamlib_freq_received = false;
+                Console.WriteLine("rigctl freq received to Form1: "+statics.hamlib_freq_value);
+                statics.TXoffset = (int)(statics.hamlib_freq_value-2399970000);
+                statics.RXoffset = (int)(statics.hamlib_freq_value-2399970000);
+                statics.sendRXTXoffset();
+            }
 
             if (statics.pttmode == 0)
             {

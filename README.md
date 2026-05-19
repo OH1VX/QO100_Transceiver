@@ -5,9 +5,11 @@ Intention of the fork is to explore the codebase and bring up following changes 
 * [x] Change the operation of QO-100 Low beacon tracker
   * Original doesn't actually shift the received spectrum according to the frequency drift
   * [x] Automatic re-calibration when frequency drift happens
-* [ ] Add support for minimal set of hamlib compatible commands
-  * [ ] Set frequency: F \<frequency\>
-  * [ ] Set transmit on and off: T 1, T 0
+  * [ ] Implement recovery from drift caused by spurious TX near low beacon. Or switch using upper beacon when low has 
+* [x] Add support for minimal set of hamlib compatible commands (default port 10010)
+  * [x] Set frequency: F \<frequency\>
+  * [x] Set transmit on and off: T 1, T 0
+  * [x] Works with VarAC
 * [x] Allow monitoring devices to be used as audio inputs on Linux
 * [x] Compile GUI by default
   * [x] Remove generated files from git
@@ -47,7 +49,7 @@ V1.72 ...September, 18 2021 ... new AUDIO menu, new AGC, allows full output even
          January 13, 2022 ... modified installation procedure to get it running on raspberry OS "bullseye"\
 V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it easier to continue a QSO if the software was stopped or crashed.\
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
-V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens.
+V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010).
 
 
 ![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
