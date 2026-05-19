@@ -1,27 +1,11 @@
-# Note: This is a fork of dj0abr's repository
+# This is a fork of dj0abr's repository
 
-Intention of the fork is to explore the codebase and bring up following changes to version V1.73a+OH1VX-r1:
-* [x] Update README.md to reflect current and upcoming changes
-* [x] Change the operation of QO-100 Low beacon tracker
-  * Original doesn't actually shift the received spectrum according to the frequency drift
-  * [x] Automatic re-calibration when frequency drift happens
-  * [ ] Implement recovery from drift caused by spurious TX near low beacon. Or switch using upper beacon when low has 
-* [x] Add support for minimal set of hamlib compatible commands (default port 10010)
-  * [x] Set frequency: F \<frequency\>
-  * [x] Set transmit on and off: T 1, T 0
-  * [x] Works with VarAC
-* [x] Allow monitoring devices to be used as audio inputs on Linux
-* [x] Compile GUI by default
-  * [x] Remove generated files from git
-  * [x] Add new resolution
-  * [x] Increase size of setup window
-     * perhaps will be too high for small displays, but now hidden items are exposed
-* [x] Make URLs to point to this fork
-  * [x] install script
-  * [x] version checking
+# Notes from OH1VX
+This is proof-of-concept to improve RX frequency stability and enable this software to be used with VarAC. 
 
-Bring the changes with separate commits so that it's easier to review and perhaps cherry-pick changes to other repositories. The mentioned changes have proof-of-concept implementation to be brought here.
+There are still room for improvement in many things, so changes are likely. Bug reports and CR's are welcome!
 
+I think at RX the frequency drift compensation should have been made in different manner, but hey, this quick and dirty way works too. The inaccuracy is rarely over 6Hz with my setup.
 
 # QO100_Transceiver
 QO-100 Software Transceiver using an Adalm-Pluto and an SBC (Raspberry, Odroid ...), also works on Linux-Desktop PCs 
@@ -49,7 +33,7 @@ V1.72 ...September, 18 2021 ... new AUDIO menu, new AGC, allows full output even
          January 13, 2022 ... modified installation procedure to get it running on raspberry OS "bullseye"\
 V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it easier to continue a QSO if the software was stopped or crashed.\
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
-V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010).
+V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010). 
 
 
 ![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
@@ -76,7 +60,7 @@ https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
 open a terminal and run these commands:
 
 ```
-wget https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
+curl -O https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/install
 chmod 755 install
 ./install
 ```
@@ -86,7 +70,7 @@ that's all. There is nothing more to do than to run this install file.
 The install script was made for debian/ubuntu based Linux systems. If you are using another system then please do these steps manually:
 
 * clone this project
-* in the script QO100_Transceiver/sctipts/prepare_ubuntu_pluto look for the installation of several libraries and install them for your OS.
+* in the script QO100_Transceiver_OH1VX/sctipts/prepare_ubuntu_pluto look for the installation of several libraries and install them for your OS.
 * Install the latest version of the mono project (see prepare_mono as an example)
 * make clean and make the transceiver software
 
@@ -98,7 +82,7 @@ trxdriver .... this is the part doing all the work, without the GUI\
 trxGui.exe ... the user interface
 
 After installation both files are located in the folder\
-.../QO100_Transceiver/Release
+.../QO100_Transceiver_OH1VX/Release
 
 Additionally a start script was created
 
