@@ -470,7 +470,7 @@ namespace trxGui
                 sendCpuSpeed();
                 sendTXpower();
                 sendPTTmode();
-                this.Text += " GUI: " + formatSN(statics.gui_serno) + " Driver: " + formatSN(statics.driver_serno);
+                this.Text += " GUI: " + formatSN(statics.gui_serno) + "+OH1VX-r1" + " Driver: " + formatSN(statics.driver_serno) + "+OH1VX-r1";
                 // check consistency
                 if(statics.gui_serno != statics.driver_serno)
                 {
