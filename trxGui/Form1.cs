@@ -102,6 +102,16 @@ namespace trxGui
 
             if (statics.windowsize == wsize++)
             {
+                // sizes for screens 1800x400 pixel
+                window_width = 1880;
+                window_height = 400;
+                button_size = 32;
+                bigfnt = new Font("Verdana", 24.0f);
+            }
+
+
+            if (statics.windowsize == wsize++)
+            {
                 // sizes for screens 1600x1050 pixel
                 window_width = 1600;
                 window_height = 1050;
