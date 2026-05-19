@@ -297,7 +297,7 @@ int main ()
 	if(strstr(pr,"default via"))
 	{
 		// we are on a router, check github for updates
-		sprintf(url,"wget --no-check-certificate --no-cache --no-cookies --no-http-keep-alive -O version.txt https://raw.githubusercontent.com/dj0abr/QO100_Transceiver/main/version.txt?cachekiller=%d",rand());
+		sprintf(url,"wget --no-check-certificate --no-cache --no-cookies --no-http-keep-alive -O version.txt https://raw.githubusercontent.com/OH1VX/QO100_Transceiver/main/version.txt?cachekiller=%d",rand());
 		int sres = system(url);
 		if(sres < 0)
 		{
