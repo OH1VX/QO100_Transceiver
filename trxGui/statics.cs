@@ -405,21 +405,22 @@ namespace trxGui
 
     public class Bandplan
     {
-        public Bandentry[] be = new Bandentry[11];
+        public Bandentry[] be = new Bandentry[12];
 
         public Bandplan()
         {
-            be[0] = new Bandentry(Color.FromArgb(255,255,0,0), 10489500, "B", 10489500);
+            be[0] = new Bandentry(Color.FromArgb(0xff, 0xff, 0x00, 0x00), 10489500, "B", 10489500);
             be[1] = new Bandentry(Color.FromArgb(0xff, 0x00, 0xaf, 0xef), 10489505, "CW", 10489510);
-            be[2] = new Bandentry(Color.FromArgb(0xff, 0x6f, 0x2f, 0x9f), 10489540, "NB dig", 10489550);
-            be[3] = new Bandentry(Color.FromArgb(0xff, 0xfe, 0xbf, 0x00), 10489580, "digital", 10489605);
+            be[2] = new Bandentry(Color.FromArgb(0xff, 0x6f, 0x2f, 0x9f), 10489540, "NB dig 500Hz", 10489542);
+            be[3] = new Bandentry(Color.FromArgb(0xff, 0xfe, 0xbf, 0x00), 10489580, "Digital 2700Hz", 10489585);
             be[4] = new Bandentry(Color.FromArgb(0xff, 0x91, 0xcf, 0x4f), 10489650, "SSB only", 10489688);
             be[5] = new Bandentry(Color.FromArgb(0xff, 0xff, 0x00, 0x00), 10489745, "B", 10489748);
-            be[6] = new Bandentry(Color.FromArgb(0xff, 0x91, 0xcf, 0x4f), 10489755, "SSB only", 10489790);
-            be[7] = new Bandentry(Color.FromArgb(0xff, 0xc5, 0x59, 0x10), 10489850, "MIX", 10489850);
-            be[8] = new Bandentry(Color.FromArgb(0xff, 0xb5, 0xa9, 0x10), 10489870, "MIXED + Contest", 10489905);
-            be[9] = new Bandentry(Color.FromArgb(0xff, 0xff, 0x00, 0x00), 10489990, "B", 10489992);
-            be[10] =new Bandentry(Color.FromArgb(0xff, 0xff, 0x00, 0x00),10490000, "---", 0);
+            be[6] = new Bandentry(Color.FromArgb(0xff, 0x91, 0xcf, 0x4f), 10489755, "SSB only", 10489780);
+            be[7] = new Bandentry(Color.FromArgb(0xff, 0x81, 0xbf, 0x3f), 10489850, "Broadcast", 10489850);
+            be[8] = new Bandentry(Color.FromArgb(0xff, 0xc5, 0x20, 0x30), 10489858, "Emergency", 10489858);
+            be[9] = new Bandentry(Color.FromArgb(0xff, 0xb5, 0xa9, 0x10), 10489865, "MIXED + Contest", 10489905);
+            be[10] = new Bandentry(Color.FromArgb(0xff, 0xff, 0x00, 0x00), 10489990, "B", 10489992);
+            be[11] = new Bandentry(Color.FromArgb(0xff, 0xff, 0x00, 0x00), 10490000, "---", 0);
         }
     }
 }
