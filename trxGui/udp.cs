@@ -321,11 +321,11 @@ namespace trxGui
         static private Bandplan bp = new Bandplan();
 
         // palette
-        static Color[] col_specfill = { Color.Blue, Color.FromArgb(255, 80, 80), Color.Green, Color.LightGray };
-        static Color[] col_specline = { Color.LightGreen, Color.Yellow, Color.Cyan, Color.White };
+        static Color[] col_specfill = { Color.Blue, Color.FromArgb(255, 80, 80), Color.Green, Color.LightGray, Color.Blue };
+        static Color[] col_specline = { Color.LightGreen, Color.Yellow, Color.Cyan, Color.White, Color.LightGreen };
 
-        static SolidBrush[] br_spedFill = { new SolidBrush(col_specfill[0]), new SolidBrush(col_specfill[1]), new SolidBrush(col_specfill[2]), new SolidBrush(col_specfill[3]) };
-        static Pen[] penline = { new Pen(col_specline[0], 1), new Pen(col_specline[1], 1), new Pen(col_specline[2], 1), new Pen(col_specline[3], 1) };
+        static SolidBrush[] br_spedFill = { new SolidBrush(col_specfill[0]), new SolidBrush(col_specfill[1]), new SolidBrush(col_specfill[2]), new SolidBrush(col_specfill[3]), new SolidBrush(col_specfill[4]) };
+        static Pen[] penline = { new Pen(col_specline[0], 1), new Pen(col_specline[1], 1), new Pen(col_specline[2], 1), new Pen(col_specline[3], 1), new Pen(col_specline[4], 1) };
 
         static void drawBigSpec(int[] arr)
         {
