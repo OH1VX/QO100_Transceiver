@@ -255,7 +255,11 @@ int bcnoffset_new = -1;
 
 int bcn_spurious_count = 0;
 int bcn_spurious_max = 5;
+int bcn_huge_offset_count = 0;
+int bcn_huge_offset_max = 2;
 bool bcn_spurious_recovery = false;
+bool bcn_huge_offset_recovery_needed    = false;
+bool bcn_huge_offset_recovery_deploy    = false;
 
 void init_beaconlock()
 {
@@ -370,85 +374,89 @@ static int bcn_din_idx = 0;
     int minqrg = minf* bcn_resolution+startqrg;
     int maxqrg = maxf* bcn_resolution+startqrg;
     int diff = abs(maxqrg-minqrg);
+    const int EXPECTED_BEACON_SEPARATION = 400;
+    const int BEACON_TOLERANCE = 20;
+    const int MAX_ALLOWED_OFFSET_CHANGE = 100;
+    const int MAX_ALLOWED_HUGE_RECOVERY = 300;
     //printf("%d  %d  %d\n",minqrg,maxqrg,diff);
 
-    int newoffset = 0;
-    if(diff > 380 && diff < 420) 
+    if(diff > (EXPECTED_BEACON_SEPARATION - BEACON_TOLERANCE) && 
+       diff < (EXPECTED_BEACON_SEPARATION + BEACON_TOLERANCE)) 
     {
         //printf("%d  %d  %d\n",minqrg,maxqrg,diff);
-        // we have both frequencies, then measure the beacon mir frequency
+        // we have both frequencies, then measure the beacon mid frequency
         int bcnqrg = minqrg + diff/2;
         int bcnqrgsoll = 500200;    // expected frequency
         bcnoffset_new = (bcnqrg - bcnqrgsoll);
         printf("lower beacon %d .. %d: mid QRG: %d kHz. Offset: %d Hz\n",minqrg,maxqrg,bcnqrg,bcnoffset);
-        newoffset = 1;
-        bcn_spurious_count=0;
-    }
-    else if ( diff > 420-1) 
-    {
-        // spurious detection of two peaks during one frequency
-        printf("%d  %d  %d SPURIOUS\n",minqrg,maxqrg,diff);
-        bcn_spurious_count++;
-        //try to recover after many spurious
-        if(bcn_spurious_count>bcn_spurious_max){
-            printf(" SPURIOUS Recover\n");
-            newoffset = 1;
-            bcnoffset_new = bcnoffset_new + diff;
-            bcn_spurious_recovery = true;
+        // Try to recover if there is big offset, but two peaks are detected with correct distances.
+        // Huge offset happens usually when we happen to be locked to wrong peak.
+        // Then we can recover by switching to the new offset.
+        if(bcn_huge_offset_recovery_needed ) {
+            printf("Huge offset Recover\n");
+            bcn_huge_offset_count=0;
+            bcn_huge_offset_recovery_needed = false;
+            bcn_huge_offset_recovery_deploy = true;
         }
         else return;
+        bcn_spurious_count=0;
     }
-    else
+    else if ( (diff <= EXPECTED_BEACON_SEPARATION - BEACON_TOLERANCE) && 
+              (diff >= EXPECTED_BEACON_SEPARATION + BEACON_TOLERANCE)) 
     {
-        // we have only one frequency
-        //printf("%d  %d  %d ONE FREQ\n",minqrg,maxqrg,diff);
-        //return;
-
-
+        // wrong offset between peaks, probably spurious signal, ignore
+        printf("%d  %d  %d SPURIOUS\n",minqrg,maxqrg,diff);
+        bcn_spurious_count++;
+    }
+    // Detect one CW peak
+    // Don't go there if we are in recovery mode
+    // If the frequency was uncertain in previous round we can't be sure if it will be lo or hi peak
+    else if(!bcn_huge_offset_recovery_needed)
+    {
         bcn_spurious_count=0;
         int difflow = minqrg - 500000;
         int diffhigh = maxqrg - 500400;
         if(abs(difflow) < abs(diffhigh))
         {
-            //printf("lower beacon low QRG: %d kHz. Offset: %d Hz\n",minqrg,difflow);
+            printf("lower beacon low QRG: %d kHz. Offset: %d Hz\n",minqrg,difflow);
             bcnoffset_new = difflow;
-            newoffset = -2;
         }
         else
         {
-            //printf("lower beacon hi  QRG: %d kHz. Offset: %d Hz\n",maxqrg,diffhigh);
+            printf("lower beacon hi  QRG: %d kHz. Offset: %d Hz\n",maxqrg,diffhigh);
             bcnoffset_new = diffhigh;
-            newoffset = 2;
         }
-        
+        if(abs(bcnoffset_new) > MAX_ALLOWED_OFFSET_CHANGE){
+            printf("Offset too big to be determined from single CW carrier.\n");
+            bcnoffset_new=0;
+            bcn_huge_offset_recovery_needed = true;
+        }
     }
+    else printf("WAITING BEACON LOCK RECOVERY!\n");
 
     // send offset to GUI
-    //if(newoffset)
-    if((abs(bcnoffset_new)>100 && !bcn_spurious_recovery)/* || abs(bcnoffset_new)>2000*/){
-     //if(abs(bcnoffset_new)>1500 && !bcn_spurious_recovery){
-            printf("OMITTING HUGE OFFSET. Offset_new: %d Hz\n",bcnoffset_new);
+    if((abs(bcnoffset_new)>MAX_ALLOWED_OFFSET_CHANGE && !bcn_huge_offset_recovery_needed && !bcn_huge_offset_recovery_deploy)){
+            printf("HUGE OFFSET with lo and hi CW detected. Do nothing. Offset_new: %d Hz\n",bcnoffset_new);
+            bcn_huge_offset_count++;
+            if(bcn_huge_offset_count >= bcn_huge_offset_max) {
+                bcn_huge_offset_recovery_needed = true;
+            }
         }
     else
     {
         uint8_t drift[5];
         int a_iir = 1;
         int b_iir = 0; //with 3 taps frequency offset stays too long
-        if(bcn_spurious_recovery) {
-            printf(" SPURIOUS Recovery in action\n");
-            bcnoffset=bcnoffset_new;
-            bcn_spurious_recovery = false;printf(" SPURIOUS Recover\n");
-        }
-        bcn_spurious_recovery = false;
         if(bcnoffset_new==0)
             bcnoffset=bcnoffset_new;
-        else
-            bcnoffset=2*(((a_iir)*bcnoffset_new/2+(b_iir)*bcnoffset/2)/(a_iir+b_iir)); //IIR filtering the offset to requce changes
         //bcnoffset=bcnoffset_new;
-        if(abs(bcnoffset) > 200) {
+        else if((abs(bcnoffset) > MAX_ALLOWED_HUGE_RECOVERY) && !bcn_huge_offset_recovery_deploy) {
             bcnoffset=0;
             bcnoffset_new=0;
         }
+        else
+            bcnoffset=((a_iir*bcnoffset_new+b_iir*bcnoffset)/(a_iir+b_iir)); //IIR filtering the offset to requce changes
+        bcn_huge_offset_recovery_deploy = false;
         printf("Offset: %d Hz. Offset_new: %d Hz\n",bcnoffset,bcnoffset_new);
         drift[0] = 6;
         drift[1] = bcnoffset >> 24;
