@@ -470,11 +470,11 @@ namespace trxGui
                 sendCpuSpeed();
                 sendTXpower();
                 sendPTTmode();
-                this.Text += " GUI: " + formatSN(statics.gui_serno) + "+OH1VX-r1" + " Driver: " + formatSN(statics.driver_serno) + "+OH1VX-r1";
+                this.Text += " GUI: " + formatSN(statics.gui_serno) + "+" + statics.GuiFork + "-r" + statics.gui_rev.ToString() + " Driver: " + formatSN(statics.driver_serno) + "+" + statics.GuiFork + "-r" + statics.driver_rev.ToString();
                 // check consistency
-                if(statics.gui_serno != statics.driver_serno)
+                if((statics.gui_serno != statics.driver_serno) || (statics.gui_rev != statics.driver_rev))
                 {
-                    MessageBox.Show("Warning!\nGUI and Driver have different serial numbers. Please re-install this software", "Version Number Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Warning!\nGUI and Driver have different serial or revision numbers. Please re-install this software", "Version Number Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 // check for updates
                 try
@@ -482,10 +482,12 @@ namespace trxGui
                     using (StreamReader sr = new StreamReader("version.txt"))
                     {
                         int actver = ReadInt(sr);
+                        string actfork = ReadString(sr);
+                        int actrev = ReadInt(sr);
                         Console.WriteLine("act version:" + actver);
-                        if(actver > statics.gui_serno)
+                        if(actver > statics.gui_serno || (actver == statics.gui_serno && actrev > statics.gui_rev))
                         {
-                            //MessageBox.Show("a new Version is avialable at Github:" + actver.ToString(), "NEW VERSION", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("a new Version is available at Github:" + actver.ToString(), "NEW VERSION", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             String nv = " (new:V" + ((double)actver / 100).ToString() + ")";
                             this.Text += nv.Replace(',', '.');
                         }

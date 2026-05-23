@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Drawing;
 using System.Net;
@@ -157,8 +157,15 @@ namespace trxGui
                             UInt16 driversn = b[0];
                             driversn <<= 8;
                             driversn += b[1];
-                            //Console.WriteLine("Driver SN:" + driversn);
+                            Console.WriteLine("Driver SN:" + driversn);
                             statics.driver_serno = driversn;
+
+                            UInt16 driverrev = b[2];
+                            Console.WriteLine("Driver REV1:" + driverrev);
+                            driverrev <<= 8;
+                            driverrev += b[3];
+                            Console.WriteLine("Driver REV:" + driverrev);
+                            statics.driver_rev = driverrev;
                             String s = statics.ByteArrayToStringUtf8(b, 6);
                             //Console.WriteLine("Audio Devices:" + s);
                             String[] sa1 = s.Split(new char[] { '^' });
