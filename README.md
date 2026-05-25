@@ -33,7 +33,8 @@ V1.72 ...September, 18 2021 ... new AUDIO menu, new AGC, allows full output even
          January 13, 2022 ... modified installation procedure to get it running on raspberry OS "bullseye"\
 V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it easier to continue a QSO if the software was stopped or crashed.\
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
-V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010). 
+V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010). \
+V1.73a+OH1VX-r2 ... May, 25 2026 ... Bandplan updated to show emergency frequency, broadcast frequency, digital mode bandwidths. More robust beacon lock. Added a new color palette for waterfall (cold->hot).  More robust beacon lock. Added a new color palette for waterfall (cold->hot). Automatic search, if beacon locking is lost.
 
 
 ![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
@@ -70,7 +71,7 @@ that's all. There is nothing more to do than to run this install file.
 The install script was made for debian/ubuntu based Linux systems. If you are using another system then please do these steps manually:
 
 * clone this project
-* in the script QO100_Transceiver_OH1VX/sctipts/prepare_ubuntu_pluto look for the installation of several libraries and install them for your OS.
+* in the script QO100_Transceiver_OH1VX/scripts/prepare_ubuntu_pluto look for the installation of several libraries and install them for your OS.
 * Install the latest version of the mono project (see prepare_mono as an example)
 * make clean and make the transceiver software
 

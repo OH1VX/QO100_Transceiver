@@ -396,12 +396,15 @@ int main ()
 	// send audio devices to GUI
 	int len;
 	uint8_t *s = io_getAudioDevicelist(&len);
-	uint8_t ub[len+1+2];
+	uint8_t ub[len+1+2+2];
 	ub[0] = 4; // ID for sound device string
 	ub[1] = ((uint16_t)DRIVER_SERIAL) >> 8;		// driver serial number
 	ub[2] = ((uint16_t)DRIVER_SERIAL) & 0xff;
-	memcpy(ub+3,s,len);
-	sendUDP(gui_ip, GUI_UDPPORT, ub, len+1+2);
+	ub[3] = ((uint16_t)DRIVER_REVISION) >> 8;		// driver revision number
+	ub[4] = ((uint16_t)DRIVER_REVISION) & 0xff;
+	//printf("DRIVER_REVISION: %d\n",DRIVER_REVISION);
+	memcpy(ub+3+2,s,len);
+	sendUDP(gui_ip, GUI_UDPPORT, ub, len+1+2+2);
 
 	// wait for initial configuration from GUI
 	// the GUI sends now:
