@@ -45,6 +45,7 @@ namespace trxGui
         public static bool audioloop = false;
         public static bool rfloop = false;
         public static int beaconoffset = 0;
+        public static bool beaconoffset_updated = false;
         public static int corrfact = 0;
         public static int corractive = 0;
         public static int corractiveanz = 2;

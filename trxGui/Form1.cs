@@ -487,7 +487,7 @@ namespace trxGui
                         Console.WriteLine("act version:" + actver);
                         if(actver > statics.gui_serno || (actver == statics.gui_serno && actrev > statics.gui_rev))
                         {
-                            MessageBox.Show("a new Version is available at Github:" + actver.ToString(), "NEW VERSION", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("a new Version is available at " + actfork + "\'s Github:" + actver.ToString(), "NEW VERSION", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             String nv = " (new:V" + ((double)actver / 100).ToString() + ")";
                             this.Text += nv.Replace(',', '.');
                         }
@@ -499,14 +499,12 @@ namespace trxGui
                 panel_beaconlock.Invalidate();
             }
 
-            if(statics.beaconoffset != oldbcnoffset)
+            if(statics.beaconoffset_updated)
             {
-                oldbcnoffset = statics.beaconoffset;
-                if(statics.beaconoffset!=0) {
-                    if(Math.Abs(statics.beaconoffset)>4) statics.lnboffset += statics.beaconoffset/2;
-                    else {
-                        statics.lnboffset += (statics.beaconoffset<0)?-1:1; //Miika modified
-                    }
+                statics.beaconoffset_updated = false;
+
+                if(statics.beaconoffset != 0) {
+                    statics.lnboffset += statics.beaconoffset/2;
                 }
                 statics.sendBaseQRG();
                 panel_qrg.Invalidate();
@@ -578,8 +576,6 @@ namespace trxGui
 
             return s;
         }
-
-        int oldbcnoffset = -1;
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
