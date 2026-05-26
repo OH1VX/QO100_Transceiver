@@ -34,8 +34,8 @@ V1.72 ...September, 18 2021 ... new AUDIO menu, new AGC, allows full output even
 V1.73 ...April, 2 2022 ... when restarting: uses last RX/TX qrg. This makes it easier to continue a QSO if the software was stopped or crashed.\
 V1.73a...November, 16 2022 ... extended the install script for the ubuntu version vanessa. The TRX is the same as 1.73, just the installation has been extended.\
 V1.73a+OH1VX-r1 ... May, 19 2026 ... GUI compilation, new resolution, setup window size changed. Allow monitor devices to be used as audio input on Linux. Change the operation of QO-100 Low beacon tracker, automatic re-calibration when frequency drift happens. Support for minimal set of hamlib compatible commands (default port 10010). \
-V1.73a+OH1VX-r2 ... May, 25 2026 ... Bandplan updated to show emergency frequency, broadcast frequency, digital mode bandwidths. More robust beacon lock. Added a new color palette for waterfall (cold->hot).  More robust beacon lock. Added a new color palette for waterfall (cold->hot). Automatic search, if beacon locking is lost.
-
+V1.73a+OH1VX-r2 ... May, 25 2026 ... Bandplan updated to show emergency frequency, broadcast frequency, digital mode bandwidths. More robust beacon lock. Added a new color palette for waterfall (cold->hot). Automatic search, if beacon locking is lost.
+V1.73a+OH1VX-r3 ... ???, ?? ???? ... 
 
 ![alt text](https://github.com/OH1VX/QO100_Transceiver/blob/main/trxGui/Properties/sampleGUI.png)
 
