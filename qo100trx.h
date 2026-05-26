@@ -73,3 +73,4 @@ extern float rxvolume;
 extern int sendtone;
 extern int micboost;
 extern int agcvalue;
+extern volatile int flush_tx_fifo;

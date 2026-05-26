@@ -57,6 +57,7 @@ int sendtone = 0;
 int extpttinput_enabled = 0;
 int mute_enabled = 0;
 int pttmode = 0;
+volatile int flush_tx_fifo = 0;
 
 // fifos to send/receive samples with pluto run thread
 int RXfifo;
@@ -102,7 +103,7 @@ bool rigctl_get_current_ptt() {
           // switch to TX mode
           setSendtone(0);// never start with a test tone after pressing PTT
           io_fifo_clear(capidx);
-          fifo_clear(TXfifo);
+          flush_tx_fifo = 1;
           // Send to GUI
           set_ptt();
           send_ptt[0] = 11; //PTT id
@@ -170,7 +171,7 @@ void udprxfunc(uint8_t *pdata, int len, struct sockaddr_in* sender)
 			// switch to TX mode
 			setSendtone(0);// never start with a test tone after pressing PTT
 			io_fifo_clear(capidx);
-			fifo_clear(TXfifo);
+			flush_tx_fifo = 1;
 			set_ptt();
 		}
 
@@ -337,6 +338,8 @@ void close_program()
 	close_liquid_modulator();
 	close_fft();
 	close_gpio();
+	kmaudio_close();
+	destroy_fifos();
 }
 
 int main ()
@@ -556,7 +559,7 @@ int main ()
 				// switch to TX mode
 				setSendtone(0);// never start with a test tone after pressing PTT
 				io_fifo_clear(capidx);
-				fifo_clear(TXfifo);
+				flush_tx_fifo = 1;
 				set_ptt();
 			}
 

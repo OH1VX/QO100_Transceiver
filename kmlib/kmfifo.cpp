@@ -47,7 +47,7 @@ int create_fifo(int maxelem_num, int maxelem_len)
     // create the fifo memory and init variables
     fifo[fifonum].fifomem = malloc(maxelem_num * maxelem_len);
     fifo[fifonum].plen = (int *)malloc(maxelem_num * sizeof(int));
-    fifo[fifonum].maxelemlen =maxelem_len;
+    fifo[fifonum].maxelemlen = maxelem_len;
     fifo[fifonum].maxelem = maxelem_num;
     fifo[fifonum].rdidx = 0;
     fifo[fifonum].wridx = 0;
@@ -63,9 +63,9 @@ void destroy_fifos()
 {
     for(int i=0; i<fifonum; i++)
     {
-        free(fifo[fifonum].fifomem);
-        free(fifo[fifonum].plen);
-        if (&fifo[fifonum].crit_sec != NULL) pthread_mutex_destroy(&fifo[fifonum].crit_sec);
+        free(fifo[i].fifomem);
+        free(fifo[i].plen);
+        if (&fifo[i].crit_sec != NULL) pthread_mutex_destroy(&fifo[i].crit_sec);
     }
 }
 
@@ -91,7 +91,7 @@ void write_fifo(int id, uint8_t *pdata, int len)
     }
 
     // insert length of new data
-    *(pfo->plen) = len; // real length of the element
+    *(pfo->plen + pfo->wridx) = len; // real length of the element
 
     // insert new data
     void *dst = (void *)((uint8_t *)pfo->fifomem + pfo->wridx * pfo->maxelemlen);
@@ -117,7 +117,7 @@ int read_fifo(int id, uint8_t* pdata, int maxlen)
     }
 
     // read length
-    int len =  *pfo->plen;  // length of an element
+    int len =  *(pfo->plen + pfo->rdidx);  // length of an element
 
     if (len > maxlen)
     {
@@ -136,7 +136,9 @@ int read_fifo(int id, uint8_t* pdata, int maxlen)
 
 void fifo_clear(int id)
 {
+    LOCK(id);
     fifo[id].wridx = fifo[id].rdidx = 0;
+    UNLOCK(id);
 }
 
 int fifo_freespace(int id)

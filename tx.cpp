@@ -85,6 +85,10 @@ void* tx_threadfunction(void* param)
                 }
                 else
                 {
+					if(flush_tx_fifo){
+						fifo_clear(TXfifo);
+						flush_tx_fifo = 0;
+					}
                     #ifdef SINUSTEST
                     memcpy(f,sinus,sizeof(float)*4800);
                     #endif
