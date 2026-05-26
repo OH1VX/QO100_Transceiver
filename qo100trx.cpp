@@ -84,49 +84,45 @@ bool rigctl_get_current_ptt() {
   uint8_t send_freq[5];
   RigctlCommand cmd;
   while (getRigctlQueue().pop(cmd)) {
-	printf("*** rigctl_Queue command received ***\n");
+    printf("*** rigctl_Queue command received ***\n");
     if (cmd.type == RigctlCommand::SET_FREQ) {
-		printf("*** rigctl_Queue set freq:%ld ***\n",cmd.freqHz);
-		send_freq[0] = 12; //ID for freq
-		send_freq[1] = (uint8_t)(cmd.freqHz >> 24);
-        send_freq[2] = (uint8_t)(cmd.freqHz >> 16);
-        send_freq[3] = (uint8_t)(cmd.freqHz >> 8);
-        send_freq[4] = (uint8_t)(cmd.freqHz & 0xff);
-		sendUDP(gui_ip, GUI_UDPPORT, send_freq, 5);
-      // Use existing internal function that sets tune frequency (run on control thread)
-      //setTuneFrequencyHz(cmd.freqHz); // adapt to actual API
+      printf("*** rigctl_Queue set freq:%ld ***\n",cmd.freqHz);
+      send_freq[0] = 12; //ID for freq
+      send_freq[1] = (uint8_t)(cmd.freqHz >> 24);
+      send_freq[2] = (uint8_t)(cmd.freqHz >> 16);
+      send_freq[3] = (uint8_t)(cmd.freqHz >> 8);
+      send_freq[4] = (uint8_t)(cmd.freqHz & 0xff);
+      sendUDP(gui_ip, GUI_UDPPORT, send_freq, 5);
     } else if (cmd.type == RigctlCommand::SET_PTT) {
-		printf("*** rigctl_Queue set ptt:%d ***\n",cmd.ptt);
-		ptt = cmd.ptt ? 1 : 0;
-		if(cmd.ptt == 1){
-			
-			if(ptt && lastptt == 0)
-			{
-				// switch to TX mode
-				setSendtone(0);// never start with a test tone after pressing PTT
-				io_fifo_clear(capidx);
-				fifo_clear(TXfifo);
-				// Send to GUI
-				set_ptt();
-				send_ptt[0] = 11; //PTT id
-				send_ptt[1] = (uint8_t)cmd.ptt;
-				sendUDP(gui_ip, GUI_UDPPORT, send_ptt, 2);
-			}
+      printf("*** rigctl_Queue set ptt:%d ***\n",cmd.ptt);
+      ptt = cmd.ptt ? 1 : 0;
+      if(cmd.ptt == 1){
+        if(ptt && lastptt == 0)
+        {
+          // switch to TX mode
+          setSendtone(0);// never start with a test tone after pressing PTT
+          io_fifo_clear(capidx);
+          fifo_clear(TXfifo);
+          // Send to GUI
+          set_ptt();
+          send_ptt[0] = 11; //PTT id
+          send_ptt[1] = (uint8_t)cmd.ptt;
+          sendUDP(gui_ip, GUI_UDPPORT, send_ptt, 2);
         }
-		else {
-			if(ptt==0 && lastptt)
-			{
-				// switch to TX mode
-				release_ptt();
-				// Send to GUI
-				send_ptt[0] = 11; //PTT id
-				send_ptt[1] = (uint8_t)cmd.ptt;
-				sendUDP(gui_ip, GUI_UDPPORT, send_ptt, 2);
-			}
-
-			lastptt = ptt;
-		}
-	}
+      }
+      else {
+        if(ptt==0 && lastptt)
+        {
+          // switch to RX mode
+          release_ptt();
+          // Send to GUI
+          send_ptt[0] = 11; //PTT id
+          send_ptt[1] = (uint8_t)cmd.ptt;
+           sendUDP(gui_ip, GUI_UDPPORT, send_ptt, 2);
+         }
+      }
+      lastptt = ptt;
+    }
   }
 }
 
