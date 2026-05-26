@@ -1,6 +1,6 @@
 VERSION := 173
 FORK := OH1VX
-REVISION := 2
+REVISION := 3
 CXXFLAGS = -Wall -O3 -std=c++0x -Wno-write-strings -Wno-narrowing -DDRIVER_SERIAL=$(VERSION) -DDRIVER_FORK=$(FORK) -DDRIVER_REVISION=$(REVISION) $(RASPI)
 LDFLAGS = -lpthread -lrt -lm -liio -lliquid -lad9361 -lfftw3 -lfftw3_threads -lsndfile -lasound -lsoundio -lgpiod
 OBJ = trxdriver/rigctld_server.o trxdriver/rigctl_commands.o qo100trx.o rx.o tx.o fft.o\

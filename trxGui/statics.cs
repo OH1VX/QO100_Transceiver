@@ -11,7 +11,7 @@ namespace trxGui
     {
         public static UInt16 gui_serno = 173;   // 123 means: V1.23
         public static String GuiFork = "OH1VX";
-        public static UInt16 gui_rev = 2;
+        public static UInt16 gui_rev = 3;
         public static UInt16 driver_serno = 0;
         public static UInt16 driver_rev = 0;
         public static bool running = true;

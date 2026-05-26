@@ -238,6 +238,7 @@ namespace trxGui
                             v |= b[3];
 
                             statics.beaconoffset = v;
+                            statics.beaconoffset_updated = true;
                             //Console.WriteLine("beaconoffset: " + statics.beaconoffset);
                         }
 
