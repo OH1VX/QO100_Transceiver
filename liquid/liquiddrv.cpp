@@ -74,7 +74,6 @@ void close_liquid()
 void createSSBfilter()
 {
 static int lastrxfilter = -1;
-
     if(rxfilter != lastrxfilter)
     {
         printf("create RX SSB filter: %d\n",rxfilter);
@@ -98,7 +97,6 @@ static int lastrxfilter = -1;
 void tune_downmixer()
 {
 static int lastoffset = -1;
-
     int newoffset = RXoffsetfreq;
     if(beaconlock) 
         newoffset += bcnoffset;
@@ -375,6 +373,25 @@ static int wait_for_beacon_to_stabilize = 0;
             if(i > maxf) maxf = i;
         }
     }
+
+
+
+	uint8_t bcnlineraw[1 + 2 * numbins];
+	int bcnidx = 0;
+	bcnlineraw[bcnidx] = 13;  // ID for bcn waterfall
+	bcnidx++;
+	for(int i=0; i<numbins; i++)  // NOT numbins*2
+	{
+		uint16_t one_bin = uint16_t(bin[i]*2540);
+		//printf("%d: %d\n",i,one_bin);
+		bcnlineraw[bcnidx] = one_bin >> 8;
+		bcnlineraw[bcnidx+1] = one_bin & 0xff;
+		bcnidx+=2;
+	}
+
+	sendUDP(gui_ip, GUI_UDPPORT, bcnlineraw, numbins*2+1);
+
+
 
     int minqrg = minf* bcn_resolution+startqrg;
     int maxqrg = maxf* bcn_resolution+startqrg;

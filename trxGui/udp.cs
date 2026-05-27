@@ -284,6 +284,17 @@ namespace trxGui
                             statics.hamlib_freq_value    = v;
                             statics.hamlib_freq_received = true;
                         }
+                        if (rxtype == 13)
+                        {
+							// big Spectrum, mid values
+							Console.WriteLine(rxtype + " len " + b.Length);
+							if (Form1.beaconMonitor != null)
+							{
+								int[] arr = getSpecArr(b);
+                                Form1.beaconMonitor.UpdateBeaconData(arr);
+							}
+                            
+						}
                     }
                 }
                 catch { }

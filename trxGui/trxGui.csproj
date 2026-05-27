@@ -86,6 +86,12 @@
     <Compile Include="Form_setup.Designer.cs">
       <DependentUpon>Form_setup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_BeaconMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_BeaconMonitor.Designer.cs">
+      <DependentUpon>Form_BeaconMonitor.cs</DependentUpon>
+    </Compile>
     <Compile Include="language.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

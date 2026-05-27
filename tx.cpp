@@ -75,7 +75,7 @@ void* tx_threadfunction(void* param)
         if(capidx != -1)
         {
             int ret = kmaudio_readsamples(capidx, f, 4800, 1.0f, 0);
-            if(ret)
+            if(ret > 0 && ret <= 4800)
             {
                 if(audioloop)
                 {
@@ -99,8 +99,10 @@ void* tx_threadfunction(void* param)
                     }
                 }
             }
-            else
+            else if (ret <= 0)
                 usleep(1000);
+            else
+                printf("ERROR: got %d samples, buffer only 4800", ret);
         }
         else
             usleep(1000);

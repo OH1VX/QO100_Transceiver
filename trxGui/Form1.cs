@@ -7,6 +7,7 @@ namespace trxGui
 {
     public partial class Form1 : Form
     {
+		public static Form_BeaconMonitor beaconMonitor;
         int window_width = 800;
         int window_height = 480;
         int spec_height = 88;
@@ -218,6 +219,10 @@ namespace trxGui
             panel_testtone.Location = new Point(but_left_leftmargin, panel_recall.Location.Y + panel_recall.Height + but_left_spacing);
             panel_testtone.Width = but_left_width;
             panel_testtone.Height = but_left_heigth;
+            
+            panel_beaconmonitor.Location = new Point(but_left_leftmargin, panel_testtone.Location.Y + panel_testtone.Height + but_left_spacing);
+			panel_beaconmonitor.Width = but_left_width;
+			panel_beaconmonitor.Height = but_left_heigth;
 
 
             // main panels
@@ -1778,6 +1783,19 @@ namespace trxGui
             else
                 e.Graphics.DrawImage(Properties.Resources.wave, 0, 0);
         }
+
+		private void panel_beaconmonitor_Click(object sender, EventArgs e)
+		{
+			if (beaconMonitor == null || beaconMonitor.IsDisposed)
+			{
+				beaconMonitor = new Form_BeaconMonitor();
+				beaconMonitor.Show();
+			}
+			else
+			{
+				beaconMonitor.Focus();
+			}
+		}
     }
 
     class DoubleBufferedPanel : Panel 

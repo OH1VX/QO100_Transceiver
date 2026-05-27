@@ -201,6 +201,11 @@ void udprxfunc(uint8_t *pdata, int len, struct sockaddr_in* sender)
 
 	if(pdata[0] == 7)
 	{
+		//if(len < 202){
+		if(len < 201){
+			printf("Command 7: packet too short. len=%d\n",len);
+			return;
+		}
 		memcpy(pbdevname,pdata+1,100);
 		pbdevname[99] = 0;
 		memcpy(capdevname,pdata+1+100,100);
@@ -243,6 +248,7 @@ void udprxfunc(uint8_t *pdata, int len, struct sockaddr_in* sender)
 
 	if(pdata[0] == 10)
 	{
+		if(len <2) return;
 		if(pdata[1] == 1)
 		{
 			// Pluto on local USB
@@ -251,10 +257,15 @@ void udprxfunc(uint8_t *pdata, int len, struct sockaddr_in* sender)
 		}
 		else
 		{
+			if(len - 2 > 96){
+				printf("Pluto address too long\n");
+				return;
+			}
 			// Pluto on ETH
 			memset(plutoid,0,sizeof(plutoid));
 			strcpy(plutoid,"ip:");
 			memcpy(plutoid+3,pdata+2,len-2);
+			plutoid[99] = 0; //null termination
 			printf("Pluto on Ethernet IP: <%s>\n",plutoid);
 		}
 		gotPlutoID = 1;
@@ -269,13 +280,10 @@ void udprxfunc(uint8_t *pdata, int len, struct sockaddr_in* sender)
 
 	if(pdata[0] == 12)
 		rxfilter = pdata[1];
-
 	if(pdata[0] == 13)
 		txfilter = pdata[1];
-
 	if(pdata[0] == 14)
 		rxmute = pdata[1];
-
 	if(pdata[0] == 15)
 	{
 		int val;
@@ -395,7 +403,11 @@ int main ()
 	// send audio devices to GUI
 	int len;
 	uint8_t *s = io_getAudioDevicelist(&len);
-	uint8_t ub[len+1+2+2];
+	uint8_t *ub = (uint8_t *)malloc(len+1+2+2);
+	if(!ub) {
+		printf("Cannot allocate memory for audio device list");
+		return 1;
+	}
 	ub[0] = 4; // ID for sound device string
 	ub[1] = ((uint16_t)DRIVER_SERIAL) >> 8;		// driver serial number
 	ub[2] = ((uint16_t)DRIVER_SERIAL) & 0xff;
@@ -404,7 +416,7 @@ int main ()
 	//printf("DRIVER_REVISION: %d\n",DRIVER_REVISION);
 	memcpy(ub+3+2,s,len);
 	sendUDP(gui_ip, GUI_UDPPORT, ub, len+1+2+2);
-
+	free(ub);
 	// wait for initial configuration from GUI
 	// the GUI sends now:
 	// selected Audio Device (udp code 7)
@@ -564,7 +576,6 @@ int main ()
 			}
 
 			if(!ptt) release_ptt();	// switch to RX mode
-
 			lastptt = ptt;
 		}
 

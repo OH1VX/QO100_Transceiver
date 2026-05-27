@@ -322,6 +322,14 @@ namespace trxGui
             this.panel_testtone.Click += new System.EventHandler(this.panel_testtone_Click);
             this.panel_testtone.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_testtone_Paint);
             // 
+            // panel_beaconmonitor
+            //
+            this.panel_beaconmonitor = new System.Windows.Forms.Panel();
+			this.panel_beaconmonitor.Name = "panel_beaconmonitor";
+			this.panel_beaconmonitor.BackColor = System.Drawing.Color.Gray; // or whatever color
+			this.panel_beaconmonitor.Click += new System.EventHandler(this.panel_beaconmonitor_Click);
+			this.Controls.Add(this.panel_beaconmonitor);
+            // 
             // panel_rxline
             // 
             this.panel_rxline.BackColor = System.Drawing.Color.Gray;
@@ -481,6 +489,7 @@ namespace trxGui
         private System.Windows.Forms.Panel panel_recall;
         private System.Windows.Forms.Panel panel_save;
         private System.Windows.Forms.Panel panel_testtone;
+        private System.Windows.Forms.Panel panel_beaconmonitor;
     }
 }
 

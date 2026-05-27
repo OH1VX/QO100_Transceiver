@@ -124,7 +124,6 @@ void close_liquid_modulator()
 void createBandpass()
 {
 static int lasttxfilter = -1;
-
     if(txfilter != lasttxfilter)
     {
         lasttxfilter = txfilter;
@@ -345,12 +344,10 @@ int txbufidx = 0;
 
         //measure_maxval(xi[i], 480000);
     }
-
     if(sendtone == 0)
     {
         agc(xi, xq, PLUTOBUFSIZE, (float)agcvalue);    // AGC to maximum 16 bit value
     }
-
     for(int i=0; i<PLUTOBUFSIZE; i++)
     {
         //if(measure_maxval(xi[i], 480000)) printf("smult: %f\n", smult);
